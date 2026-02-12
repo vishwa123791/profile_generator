@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="card.css" />
+  </head>
+  <body>
+    <div id="profileContainer"></div>
+    <div class="back"></div>
+    <button id="downloadBtn">Download Profile</button>
+    <script>
+      const bac = document.querySelector(".back");
+      const data = JSON.parse(localStorage.getItem("profileData"));
+      if (data) {
+        const card = document.createElement("div");
+        card.id = "profileCard"; 
+        card.className = "card1 profile-card1";
+        const title = document.createElement("h2");
+        title.textContent = "Profile Preview";
+        const avatar = document.createElement("div");
+        avatar.className = "avatar-placeholder1";
+        if (data.image) {
+          const img = document.createElement("img");
+          img.src = data.image;
+          img.style.width = "120px";
+          img.style.height = "120px";
+          img.style.borderRadius = "50%";
+          avatar.innerHTML = "";
+          avatar.appendChild(img);
+        }
+        const info = document.createElement("div");
+        info.className = "profile-info1";
+        function createField(label, value) {
+          const field = document.createElement("div");
+          field.className = "profile-field1";
+          const l = document.createElement("div");
+          l.className = "profile-label1";
+          l.textContent = label;
+          const v = document.createElement("div");
+          v.className = "profile-value1";
+          v.textContent = value;
+          field.appendChild(l);
+          field.appendChild(v);
+          return field;
+        }
+
+        info.appendChild(createField("Name", data.name));
+        info.appendChild(createField("Age", data.age));
+        info.appendChild(createField("Profession", data.profession));
+        info.appendChild(createField("Bio", data.bio));
+
+        card.appendChild(title);
+        card.appendChild(avatar);
+        card.appendChild(info);
+
+        document.getElementById("profileContainer").appendChild(card);
+      }
+      bac.addEventListener("click", function () {
+        window.location.href = "profile.html";
+      });
+      const downloadBtn = document.getElementById("downloadBtn");
+
+downloadBtn.addEventListener("click", function () {
+  const profileCard = document.getElementById("profileCard");
+
+  html2canvas(profileCard, {
+    useCORS: true,
+    scale: 2
+  }).then(canvas => {
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = "profile.png";
+    link.click();
+  });
+});
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  </body>
+</html>
